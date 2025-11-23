@@ -61,52 +61,54 @@ document.addEventListener('DOMContentLoaded', () => {
         accountInfo.classList.remove('hidden');
     }
 
-// --- THÊM HÀM BĂM SHA256 ---
-function hashSHA256(str) {
-    // CryptoJS phải được tải từ CDN trong index.html
-    return CryptoJS.SHA256(str).toString();
-}
-
-// --- LOGIC ĐĂNG NHẬP (Đã cập nhật) ---
+// --- LOGIC ĐĂNG NHẬP ---
 loginForm.addEventListener('submit', function(e) {
     e.preventDefault(); 
     
     const username = usernameInput.value.trim();
-    const rawPassword = passwordInput.value.trim(); // Lấy mật khẩu thô
-    
+    const inputPassword = passwordInput.value.trim(); // Mật khẩu người dùng nhập
+
     if (!bankData || !bankData.accounts) {
          loginMessage.textContent = 'Hệ thống chưa sẵn sàng. Vui lòng thử lại sau.';
          return;
     }
-    
-    // Băm mật khẩu thô do người dùng nhập
-    const hashedPassword = hashSHA256(rawPassword);
 
-    // Tìm kiếm thông tin đăng nhập trong mảng accounts, so sánh với chuỗi đã băm
+    // 1. Tìm kiếm tài khoản dựa trên tên đăng nhập
     const accountFound = bankData.accounts.find(
-        // CHỈ SO SÁNH CHUỖI ĐÃ BĂM
-        a => a.username === username && a.password === hashedPassword
+        a => a.username === username
     );
 
     if (accountFound) {
-        // Đăng nhập thành công
-        loggedInAccount = accountFound;
-        loginMessage.textContent = '';
+        // 2. Lấy mật khẩu Base64 đã lưu
+        const encodedPassword = accountFound.password;
         
-        // Ẩn/Hiện giao diện
-        loginSection.classList.add('hidden');
-        balanceSection.classList.remove('hidden');
+        // 3. GIẢI MÃ mật khẩu Base64 để so sánh với mật khẩu người dùng nhập (inputPassword)
+        try {
+            const decodedPassword = atob(encodedPassword); // Hàm giải mã Base64
+            
+            if (inputPassword === decodedPassword) {
+                 // Đăng nhập thành công
+                loggedInAccount = accountFound; 
+                loginMessage.textContent = '';
+                
+                // Ẩn giao diện đăng nhập, hiện giao diện số dư
+                loginSection.classList.add('hidden');
+                balanceSection.classList.remove('hidden');
 
-        // Hiển thị số dư
-        displayBalance();
-
-    } else {
-        // Đăng nhập thất bại
-        loginMessage.textContent = 'Tên đăng nhập hoặc mật khẩu không đúng.';
-        passwordInput.value = ''; 
+                // Hiển thị số dư
+                displayBalance();
+                return;
+            }
+        } catch (error) {
+            console.error("Lỗi giải mã Base64:", error);
+            // Nếu có lỗi giải mã (ví dụ: chuỗi Base64 không hợp lệ)
+        }
     }
+    
+    // Đăng nhập thất bại (hoặc do mật khẩu sai, hoặc do lỗi giải mã)
+    loginMessage.textContent = 'Tên đăng nhập hoặc mật khẩu không đúng.';
+    passwordInput.value = ''; 
 });
-
 
     // Gọi hàm tải dữ liệu ngay khi trang được tải
     loadData();
