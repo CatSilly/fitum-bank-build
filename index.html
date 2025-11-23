@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitum Bank - Online Banking</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>@ Fitum Bank</h1>
+        </header>
+
+        <div id="login-section">
+            <h2>Đăng Nhập</h2>
+            <form id="login-form" class="card">
+                <div class="input-group">
+                    <label for="username">Tên đăng nhập:</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Mật khẩu:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" id="login-button">Đăng Nhập</button>
+                <p id="login-message" class="error-message"></p>
+            </form>
+        </div>
+        <div id="balance-section" class="hidden">
+            <h2>Số Dư Tài Khoản</h2>
+            <main class="balance-card card">
+                <p class="loading-message">Đang tải dữ liệu...</p>
+                <div id="account-info" class="hidden">
+                    <div class="detail-row">
+                        <span>Chủ Tài Khoản:</span>
+                        <span id="holder-name"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Số Tài Khoản:</span>
+                        <span id="account-number"></span>
+                    </div>
+                    <div class="balance-display">
+                        <p>Số Tiền Còn Lại:</p>
+                        <h2 id="current-balance"></h2>
+                    </div>
+                </div>
+            </main>
+        </div>
+        </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
