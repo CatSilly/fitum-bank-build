@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadData() {
         loadingMessage.textContent = 'Đang khởi động hệ thống...';
         try {
-            const response = await fetch('data.json'); 
+            const response = await fetch('https://raw.githubusercontent.com/CatSilly/fitum-bank-db/refs/heads/main/data.json'); 
             
             if (!response.ok) {
                 throw new Error(`Lỗi tải dữ liệu: ${response.status}`);
