@@ -106,7 +106,6 @@ loginForm.addEventListener('submit', function(e) {
         passwordInput.value = ''; 
     }
 });
-// --- (Giữ nguyên các hàm và logic tải dữ liệu khác) ---
 
 
     // Gọi hàm tải dữ liệu ngay khi trang được tải
