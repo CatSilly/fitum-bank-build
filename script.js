@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadData() {
         loadingMessage.textContent = 'Đang khởi động hệ thống...';
         try {
-            const response = await fetch('https://raw.githubusercontent.com/CatSilly/fitum-bank-db/refs/heads/main/data.json'); 
+            const response = await fetch('data.json'); 
             
             if (!response.ok) {
                 throw new Error(`Lỗi tải dữ liệu: ${response.status}`);
@@ -61,41 +61,53 @@ document.addEventListener('DOMContentLoaded', () => {
         accountInfo.classList.remove('hidden');
     }
 
-    // --- LOGIC ĐĂNG NHẬP ---
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault(); 
+// --- THÊM HÀM BĂM SHA256 ---
+function hashSHA256(str) {
+    // CryptoJS phải được tải từ CDN trong index.html
+    return CryptoJS.SHA256(str).toString();
+}
+
+// --- LOGIC ĐĂNG NHẬP (Đã cập nhật) ---
+loginForm.addEventListener('submit', function(e) {
+    e.preventDefault(); 
+    
+    const username = usernameInput.value.trim();
+    const rawPassword = passwordInput.value.trim(); // Lấy mật khẩu thô
+    
+    if (!bankData || !bankData.accounts) {
+         loginMessage.textContent = 'Hệ thống chưa sẵn sàng. Vui lòng thử lại sau.';
+         return;
+    }
+    
+    // Băm mật khẩu thô do người dùng nhập
+    const hashedPassword = hashSHA256(rawPassword);
+
+    // Tìm kiếm thông tin đăng nhập trong mảng accounts, so sánh với chuỗi đã băm
+    const accountFound = bankData.accounts.find(
+        // CHỈ SO SÁNH CHUỖI ĐÃ BĂM
+        a => a.username === username && a.password === hashedPassword
+    );
+
+    if (accountFound) {
+        // Đăng nhập thành công
+        loggedInAccount = accountFound;
+        loginMessage.textContent = '';
         
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
+        // Ẩn/Hiện giao diện
+        loginSection.classList.add('hidden');
+        balanceSection.classList.remove('hidden');
 
-        if (!bankData || !bankData.accounts) {
-             loginMessage.textContent = 'Hệ thống chưa sẵn sàng. Vui lòng thử lại sau.';
-             return;
-        }
+        // Hiển thị số dư
+        displayBalance();
 
-        // Tìm kiếm thông tin đăng nhập trong mảng accounts
-        const accountFound = bankData.accounts.find(
-            a => a.username === username && a.password === password
-        );
+    } else {
+        // Đăng nhập thất bại
+        loginMessage.textContent = 'Tên đăng nhập hoặc mật khẩu không đúng.';
+        passwordInput.value = ''; 
+    }
+});
+// --- (Giữ nguyên các hàm và logic tải dữ liệu khác) ---
 
-        if (accountFound) {
-            // Đăng nhập thành công
-            loggedInAccount = accountFound; // Lưu thông tin tài khoản này
-            loginMessage.textContent = '';
-            
-            // Ẩn giao diện đăng nhập, hiện giao diện số dư
-            loginSection.classList.add('hidden');
-            balanceSection.classList.remove('hidden');
-
-            // Hiển thị số dư của tài khoản vừa đăng nhập
-            displayBalance();
-
-        } else {
-            // Đăng nhập thất bại
-            loginMessage.textContent = 'Tên đăng nhập hoặc mật khẩu không đúng.';
-            passwordInput.value = ''; 
-        }
-    });
 
     // Gọi hàm tải dữ liệu ngay khi trang được tải
     loadData();
