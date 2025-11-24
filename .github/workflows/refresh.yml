@@ -3,7 +3,7 @@ name: Tự Động Kích Hoạt Làm Mới Web Chính
 on:
   # Chạy định kỳ, ví dụ: 2 lần một ngày (vào 00:00 và 12:00 UTC)
   schedule:
-    - cron: '0 0,12 * * *' 
+    - cron: '0 0,00 * * *' 
   # Cho phép chạy thủ công qua giao diện GitHub
   workflow_dispatch: 
 
