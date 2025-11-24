@@ -5,7 +5,10 @@ on:
   schedule:
     - cron: '0 0,00 * * *' 
   # Cho phép chạy thủ công qua giao diện GitHub
-  workflow_dispatch: 
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   auto-refresh-web:
