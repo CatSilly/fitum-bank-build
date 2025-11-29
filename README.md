@@ -6,7 +6,7 @@
 - Fitum Bank, a project that bring currency "Fitum" to online.
 
 **About Fitum**
-- A currency from our Team, it appears to reA currency from our Team, it appears to replace our "for fun" trading place our "for fun" trading (and the long story behind)
+- A currency that exists for "fun", it has also existed in our Team for quite a long time
 
 ## License
 This project is licensed under the MIT license.
