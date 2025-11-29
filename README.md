@@ -8,5 +8,5 @@
 **About Fitum**
 - A currency from our Team, it appears to reA currency from our Team, it appears to replace our "for fun" trading place our "for fun" trading (and the long story behind)
 
-# License
+## License
 This project is licensed under the MIT license.
