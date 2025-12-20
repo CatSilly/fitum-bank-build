@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Thay URL này bằng URL bạn nhận được từ Localtunnel (phải có wss://)
-    const WS_URL = 'wws://fitum-db.loca.lt'; 
+    const WS_URL = 'wss://fitum-db.loca.lt'; 
     let socket;
 
     const loginForm = document.getElementById('login-form');
